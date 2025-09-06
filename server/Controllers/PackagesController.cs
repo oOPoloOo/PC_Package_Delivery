@@ -1,6 +1,7 @@
 namespace PackageDelivery.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PackageDelivery.Data;
 using PackageDelivery.DTOs;
 using PackageDelivery.Models;
@@ -50,13 +51,38 @@ public class PackagesController : ControllerBase
 
     // GET api/packages
     [HttpGet]
-    public ActionResult<IEnumerable<PackageSummaryDto>> GetAllPackages()
+    public ActionResult<IEnumerable<PackageSummaryDto>> GetAllPackages(
+        [FromQuery] string? tracking,
+        [FromQuery] PackageStatus? status
+    )
     {
-        var packages = _dbContext.Packages
-            .Select(PackageSummaryDto.FromEntity)
-            .ToList();
+        
+        var query = _dbContext.Packages.AsNoTracking();
 
-        return Ok(packages);
+        // Filter by tracking number, sender name, or recipient name
+        if(!string.IsNullOrWhiteSpace(tracking))
+        {
+            var normalized = tracking.Trim().ToLower();
+            query = query.Where(p =>
+                p.TrackingNumber.ToLower().Contains(normalized) ||
+                p.SenderName.ToLower().Contains(normalized) ||
+                p.RecipientName.ToLower().Contains(normalized));
+        }
+
+        if(status.hasValue)
+        {
+            query = query.Where(p => p.CurrentStatus == status.Value);
+        }
+
+
+        var packages = await query
+        .OrderByDescending(p => p.PackageCreatedAt)
+        .TolistAsync();
+
+        // Mapping for public to DTO
+        var shortPackages = packages.Select(PackageSummaryDto.FromEntity);           
+
+        return Ok(shortPackages);
     }
 
     // GET api/packages/{id}
