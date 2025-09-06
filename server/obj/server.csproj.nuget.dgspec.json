@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\pjaci\\Documents\\Darbo_Paieskos_2025\\Package_Delivery\\server\\server\\server.csproj": {}
+    "C:\\Users\\pjaci\\Documents\\Darbo_Paieskos_2025\\Package_Delivery\\server\\server.csproj": {}
   },
   "projects": {
-    "C:\\Users\\pjaci\\Documents\\Darbo_Paieskos_2025\\Package_Delivery\\server\\server\\server.csproj": {
+    "C:\\Users\\pjaci\\Documents\\Darbo_Paieskos_2025\\Package_Delivery\\server\\server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\pjaci\\Documents\\Darbo_Paieskos_2025\\Package_Delivery\\server\\server\\server.csproj",
+        "projectUniqueName": "C:\\Users\\pjaci\\Documents\\Darbo_Paieskos_2025\\Package_Delivery\\server\\server.csproj",
         "projectName": "server",
-        "projectPath": "C:\\Users\\pjaci\\Documents\\Darbo_Paieskos_2025\\Package_Delivery\\server\\server\\server.csproj",
+        "projectPath": "C:\\Users\\pjaci\\Documents\\Darbo_Paieskos_2025\\Package_Delivery\\server\\server.csproj",
         "packagesPath": "C:\\Users\\pjaci\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\pjaci\\Documents\\Darbo_Paieskos_2025\\Package_Delivery\\server\\server\\obj\\",
+        "outputPath": "C:\\Users\\pjaci\\Documents\\Darbo_Paieskos_2025\\Package_Delivery\\server\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\pjaci\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -48,6 +48,16 @@
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[8.0.19, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.8, )"
+            },
+            "Microsoft.EntityFrameworkCore.InMemory": {
+              "target": "Package",
+              "version": "[9.0.8, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
