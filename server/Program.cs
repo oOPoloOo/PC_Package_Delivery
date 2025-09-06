@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using PackageTracker.Data;
+using PackageDelivery.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,8 +8,8 @@ options.UseInMemoryDatabase("PackageDelivery_DB"));
 
 builder.Services.AddControllers().AddJsonOptions(opts =>
 {
-    opts.JsonSerializerOptions.Converters.
-    Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+    opts.JsonSerializerOptions.Converters
+        .Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
 });
 
 
