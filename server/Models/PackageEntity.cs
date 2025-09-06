@@ -49,7 +49,7 @@ public class PackageEntity
         { 
             //Overriding Id and TrackingNumber... to be sure
             Id = Guid.NewGuid(),
-            TraackingNumber = GenerateTrackingNumber(),
+            TrackingNumber = GenerateTrackingNumber(),
             SenderName = senderName,
             SenderAddress = senderAddress,
             SenderPhone = senderPhone,

@@ -51,7 +51,7 @@ public class PackagesController : ControllerBase
 
     // GET api/packages
     [HttpGet]
-    public ActionResult<IEnumerable<PackageSummaryDto>> GetAllPackages(
+    public async Task<ActionResult<IEnumerable<PackageSummaryDto>>> GetAllPackages(
         [FromQuery] string? tracking,
         [FromQuery] PackageStatus? status
     )
@@ -69,7 +69,7 @@ public class PackagesController : ControllerBase
                 p.RecipientName.ToLower().Contains(normalized));
         }
 
-        if(status.hasValue)
+        if(status.HasValue)
         {
             query = query.Where(p => p.CurrentStatus == status.Value);
         }
@@ -77,7 +77,7 @@ public class PackagesController : ControllerBase
 
         var packages = await query
         .OrderByDescending(p => p.PackageCreatedAt)
-        .TolistAsync();
+        .ToListAsync();
 
         // Mapping for public to DTO
         var shortPackages = packages.Select(PackageSummaryDto.FromEntity);           
