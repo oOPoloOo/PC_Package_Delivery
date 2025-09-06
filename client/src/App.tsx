@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Routes, Route } from "react-router";
 import MainOutlet from "./components/outlets/MainOutlet";
 import Home from "./components/pages/Home";
