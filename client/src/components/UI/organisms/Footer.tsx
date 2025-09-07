@@ -10,79 +10,110 @@ import CopyrightIcon from '@mui/icons-material/Copyright';
 const StyledFooter = styled.footer`
   background: #111;
   padding: 20px;
-  
+
   .footer-container {
     display: flex;
     justify-content: center;
     gap: 20px;
     color: white;
+    flex-wrap: wrap; /* responsive */
   }
 
+  /* Social box */
   .social-box {
     width: 360px;
-    height: 110px;
     border: 1px solid gray;
     border-radius: 8px;
+    padding: 15px;
+    box-sizing: border-box;
     text-align: center;
-    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .social-box h1 {
+    font-size: 18px;
+    margin-bottom: 10px;
   }
 
   .social-icons {
     display: flex;
-    gap: 40px;
-    padding-bottom: 20px;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  /* App box */
+  .app-box {
+    width: 360px;
+    border: 1px solid gray;
+    border-radius: 8px;
+    padding: 15px 20px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .app-text {
+    display: flex;
+    flex-direction: column;
     justify-content: center;
   }
 
-  .app-box {
-    width: 360px;
-    height: 110px;
-    border: 1px solid gray;
-    display: flex;
-    justify-content: space-between;
-    border-radius: 8px;
-    padding: 10px 20px;
+  .app-text h1 {
+    font-size: 18px;
+    margin: 0;
   }
 
-  .social-icons .icon-white {
-    color: white;
-    font-size: 28px;
-  }
-
-  .app-box .qr-icon {
-    color: white;
-    font-size: 80px;
+  .app-text h4 {
+    font-size: 14px;
+    margin: 5px 0 0;
+    font-weight: normal;
   }
 
   .qr-container {
     display: flex;
     align-items: center;
-    padding-right: 20px;
   }
 
+  .social-icons .icon-white,
+  .qr-icon {
+    color: white;
+  }
+
+  .social-icons .icon-white {
+    font-size: 28px;
+  }
+
+  .qr-icon {
+    font-size: 70px;
+  }
+
+  /* Copyright */
   .copyright {
     display: flex;
-    justify-content: center; 
-    align-items: center;       
+    justify-content: center;
+    align-items: center;
     color: white;
     text-align: center;
-    padding: 20px 0;
+    padding: 20px 0 0;
     font-size: 14px;
   }
 
   .copyright .icon-white {
     margin-right: 5px;
+    font-size: 16px;
   }
 `;
 
 const Footer = () => {
-  return ( 
+  return (
     <StyledFooter>
       <section className='footer-container'>
+        {/* Social box */}
         <section className='social-box'>
-          <div>
-            <h1>Follow PC-Delivery on social</h1>
-          </div>
+          <h1>Follow PC-Delivery on social</h1>
           <div className='social-icons'>
             <AudiotrackIcon className="icon-white" />
             <InstagramIcon className="icon-white" />
@@ -92,8 +123,9 @@ const Footer = () => {
           </div>
         </section>
 
+        {/* App box */}
         <section className='app-box'>
-          <div>
+          <div className='app-text'>
             <h1>Get the PC-Delivery app</h1>
             <h4>For Android and iOS</h4>
           </div>
@@ -110,5 +142,5 @@ const Footer = () => {
     </StyledFooter>
   );
 }
- 
+
 export default Footer;
