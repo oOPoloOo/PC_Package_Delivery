@@ -1,19 +1,22 @@
 import { useState, useContext } from "react";
 import PackageContext from "../../contexts/PackageContext";
 import type { CreatePackageRequest } from "../../types";
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router';
 
 const NewPackagePage = () => {
-  const ctx = useContext(PackageContext); 
-  const { addPackage } = ctx!; 
+
+  const { addPackage } = useContext(PackageContext) as PackageContextType;
+  const navigate = useNavigate();
 
 
-  const [form, setForm] = useState<CreatePackageRequest>({
-    senderName: "",
-    senderAddress: "",
-    senderPhone: "",
-    recipientName: "",
-    recipientAddress: "",
-    recipientPhone: "",
+  const [formData, setForm] = useState<CreatePackageRequest>({
+    SenderName: "",
+    SenderAddress: "",
+    SenderPhone: "",
+    RecipientName: "",
+    RecipientAddress: "",
+    RecipientPhone: "",
   });
 
   const [status, setStatus] = useState<string | null>(null);
@@ -29,11 +32,12 @@ const NewPackagePage = () => {
     e.preventDefault();
     setStatus(null);
 
-    const result = await addPackage(form);
+    const result = await addPackage(formData);
     if ("error" in result) {
-      setStatus(result.error);
+      toast.error(result.error);
     } else {
-      setStatus(result.success);
+       toast.success(result.success || 'Package added successfully.');
+      setTimeout(() => navigate('/'), 2500);
     }
   };
 
@@ -47,7 +51,7 @@ const NewPackagePage = () => {
           <input
             type="text"
             name="senderName"
-            value={form.senderName}
+            value={formData.senderName}
             onChange={handleChange}
             className="w-full border p-2 rounded"
             required
@@ -57,7 +61,7 @@ const NewPackagePage = () => {
           <label className="block font-medium">Sender Address</label>
           <textarea
             name="senderAddress"
-            value={form.senderAddress}
+            value={formData.senderAddress}
             onChange={handleChange}
             className="w-full border p-2 rounded"
             required
@@ -68,7 +72,7 @@ const NewPackagePage = () => {
           <input
             type="tel"
             name="senderPhone"
-            value={form.senderPhone}
+            value={formData.senderPhone}
             onChange={handleChange}
             className="w-full border p-2 rounded"
             required
@@ -80,7 +84,7 @@ const NewPackagePage = () => {
           <input
             type="text"
             name="recipientName"
-            value={form.recipientName}
+            value={formData.recipientName}
             onChange={handleChange}
             className="w-full border p-2 rounded"
             required
@@ -90,7 +94,7 @@ const NewPackagePage = () => {
           <label className="block font-medium">Recipient Address</label>
           <textarea
             name="recipientAddress"
-            value={form.recipientAddress}
+            value={formData.recipientAddress}
             onChange={handleChange}
             className="w-full border p-2 rounded"
             required
@@ -101,7 +105,7 @@ const NewPackagePage = () => {
           <input
             type="tel"
             name="recipientPhone"
-            value={form.recipientPhone}
+            value={formData.recipientPhone}
             onChange={handleChange}
             className="w-full border p-2 rounded"
             required
@@ -115,12 +119,6 @@ const NewPackagePage = () => {
           Save Package
         </button>
       </form>
-
-      {status && (
-        <p className="mt-4 text-center font-medium">
-          {status}
-        </p>
-      )}
     </div>
   );
 };
