@@ -10,9 +10,11 @@ export type Package = {
 export type PackageContextType = {
    packages: Package[]; 
    fetchPackages?: () => void; 
+   addPackage: (newPackage: Omit<Package, "id">) => Promise<{ error: string } | { success: string }>;
 };
 
 export type PackageContextReducerActions = 
-{ type: 'setPackage', data: Package[] };
+{ type: 'setPackage', data: Package[] } |
+{ type: 'addPackage', newPackage: Package };
 
 export type ChildrenElementProp = { children: React.ReactElement };
