@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import styled from "styled-components";
-// import Card from "../UI/molecules/PackageCard";
+import Card from "../UI/molecules/PackageCard";
 import PackageContext from "../../contexts/PackageContext";
 import type { PackageContextType  } from "../../types";
 
@@ -34,8 +34,7 @@ const HomePage = () => {
 
       <StyledPostsContainer>
         {packages.length ? (
-        //   packages.map((item) => <Card key={item.id} data={item} />)
-        <p>We have packages to show working on it!</p>
+          packages.map((item) => <Card key={item.id} data={item} />)
         ) : (
           <p>Loading...</p>
         )}
