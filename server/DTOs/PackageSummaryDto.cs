@@ -22,12 +22,12 @@ public class PackageSummaryDto
     {
         return new PackageSummaryDto
         {
-            Id = entity.Id,
-            SenderName = entity.SenderName,
-            RecipientName = entity.RecipientName,
-            TrackingNumber = entity.TrackingNumber,
-            CurrentStatus = entity.CurrentStatus,
-            PackageCreatedAt = entity.PackageCreatedAt
+            id = entity.Id,
+            senderName = entity.SenderName,
+            recipientName = entity.RecipientName,
+            trackingNumber = entity.TrackingNumber,
+            currentStatus = entity.CurrentStatus,
+            packageCreatedAt = entity.PackageCreatedAt
         };
     }
 }
