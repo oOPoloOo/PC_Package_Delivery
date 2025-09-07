@@ -8,5 +8,11 @@ export type Package = {
 };
 
 export type PackageContextType = {
-  packages: Package[]; 
+   packages: Package[]; 
+   fetchPackages?: () => void; 
 };
+
+export type PackageContextReducerActions = 
+{ type: 'setPackage', data: Package[] };
+
+export type ChildrenElementProp = { children: React.ReactElement };
