@@ -16,7 +16,7 @@ const PackageProvider = ({ children }: ChildrenElementProp) => {
 
    const fetchPackages = async () => {
     try {
-      const res = await fetch(`http://localhost:5131/api/package`);
+      const res = await fetch(`http://localhost:5131/api/packages`);
       const data: Package[] = await res.json();
       console.dir("PackageCONTEX fetchsetPackage ", data);
 
