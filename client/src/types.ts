@@ -6,12 +6,20 @@ export type Package = {
   currentStatus: string,
   packageCreatedAt: string
 };
-
+export type CreatePackageRequest = {
+  SenderName: string;
+  SenderAddress: string;
+  SenderPhone: string;
+  RecipientName: string;
+  RecipientAddress: string;
+  RecipientPhone: string;
+};
 export type PackageContextType = {
    packages: Package[]; 
    fetchPackages?: () => void; 
-   addPackage: (newPackage: Omit<Package, "id">) => Promise<{ error: string } | { success: string }>;
+   addPackage: (newPackage: CreatePackageRequest) => Promise<{ error: string } | { success: string }>;
 };
+
 
 export type PackageContextReducerActions = 
 { type: 'setPackage', data: Package[] } |

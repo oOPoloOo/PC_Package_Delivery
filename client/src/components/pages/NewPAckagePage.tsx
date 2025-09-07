@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import PackageContext from "../../contexts/PackageContext";
-import type { CreatePackageRequest } from "../../types";
+import type { CreatePackageRequest, PackageContextType } from "../../types";
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 
@@ -8,7 +8,6 @@ const NewPackagePage = () => {
 
   const { addPackage } = useContext(PackageContext) as PackageContextType;
   const navigate = useNavigate();
-
 
   const [formData, setForm] = useState<CreatePackageRequest>({
     SenderName: "",
@@ -19,8 +18,6 @@ const NewPackagePage = () => {
     RecipientPhone: "",
   });
 
-  const [status, setStatus] = useState<string | null>(null);
-
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -30,7 +27,6 @@ const NewPackagePage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus(null);
 
     const result = await addPackage(formData);
     if ("error" in result) {
@@ -50,8 +46,8 @@ const NewPackagePage = () => {
           <label className="block font-medium">Sender Name</label>
           <input
             type="text"
-            name="senderName"
-            value={formData.senderName}
+            name="SenderName"
+            value={formData.SenderName}
             onChange={handleChange}
             className="w-full border p-2 rounded"
             required
@@ -60,8 +56,8 @@ const NewPackagePage = () => {
         <div>
           <label className="block font-medium">Sender Address</label>
           <textarea
-            name="senderAddress"
-            value={formData.senderAddress}
+            name="SenderAddress"
+            value={formData.SenderAddress}
             onChange={handleChange}
             className="w-full border p-2 rounded"
             required
@@ -71,8 +67,8 @@ const NewPackagePage = () => {
           <label className="block font-medium">Sender Phone</label>
           <input
             type="tel"
-            name="senderPhone"
-            value={formData.senderPhone}
+            name="SenderPhone"
+            value={formData.SenderPhone}
             onChange={handleChange}
             className="w-full border p-2 rounded"
             required
@@ -83,8 +79,8 @@ const NewPackagePage = () => {
           <label className="block font-medium">Recipient Name</label>
           <input
             type="text"
-            name="recipientName"
-            value={formData.recipientName}
+            name="RecipientName"
+            value={formData.RecipientName}
             onChange={handleChange}
             className="w-full border p-2 rounded"
             required
@@ -93,8 +89,8 @@ const NewPackagePage = () => {
         <div>
           <label className="block font-medium">Recipient Address</label>
           <textarea
-            name="recipientAddress"
-            value={formData.recipientAddress}
+            name="RecipientAddress"
+            value={formData.RecipientAddress}
             onChange={handleChange}
             className="w-full border p-2 rounded"
             required
@@ -104,8 +100,8 @@ const NewPackagePage = () => {
           <label className="block font-medium">Recipient Phone</label>
           <input
             type="tel"
-            name="recipientPhone"
-            value={formData.recipientPhone}
+            name="RecipientPhone"
+            value={formData.RecipientPhone}
             onChange={handleChange}
             className="w-full border p-2 rounded"
             required
