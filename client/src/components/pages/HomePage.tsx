@@ -28,15 +28,16 @@ const StyledPostsContainer = styled.div`
 
 const HomePage = () => {
   const { packages } = useContext(PackageContext) as PackageContextType;
-    const navigate = useNavigate();
-
-
+  const navigate = useNavigate();
+  
   return (
     <Content>  
+
       <AddPackageButton
         label="Add ME new PACKAGE!"
         onClick={() => navigate('/addNewPackage')}
       />
+
       <h1>Deliver everything, everywhere!</h1>
 
       <StyledPostsContainer>
