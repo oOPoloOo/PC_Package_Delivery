@@ -3,6 +3,8 @@ import styled from "styled-components";
 import Card from "../UI/molecules/PackageCard";
 import PackageContext from "../../contexts/PackageContext";
 import type { PackageContextType  } from "../../types";
+import { useNavigate } from "react-router";
+import AddPackageButton from "../UI/molecules/AddPackageButton";
 
 const Content = styled.div`
   display: flex;
@@ -26,10 +28,15 @@ const StyledPostsContainer = styled.div`
 
 const HomePage = () => {
   const { packages } = useContext(PackageContext) as PackageContextType;
+    const navigate = useNavigate();
+
 
   return (
     <Content>  
-
+      <AddPackageButton
+        label="Add ME new PACKAGE!"
+        onClick={() => navigate('/addNewPackage')}
+      />
       <h1>Deliver everything, everywhere!</h1>
 
       <StyledPostsContainer>
