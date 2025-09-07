@@ -5,6 +5,8 @@ const reducer = (state: Package[], action: PackageContextReducerActions) => {
   switch(action.type){
     case 'setPackage':
       return action.data;   
+    case 'addPackage':
+    return [...state, action.newPackage];
   }
 }
 
@@ -25,15 +27,50 @@ const PackageProvider = ({ children }: ChildrenElementProp) => {
       console.error("Failed to fetch packages", error);
     }
   };
-    useEffect(() => {
+
+  useEffect(() => {
     fetchPackages();
   }, []);
+
+  type BackAddPackageResponse =
+| { error: Error; message: string }
+| {
+    packageData: Package; acknowledged: boolean;  
+  };
+
+   const addPackage = async (
+    newPackage: Omit<Package, "id">
+  ): Promise<{ error: string } | { success: string; }> => {
+
+    try {
+      const BACK_RESPONSE: BackAddPackageResponse = await fetch(`http://localhost:5131/api/packages`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newPackage),
+      }).then((res) => res.json());
+
+      if ("error" in BACK_RESPONSE) {
+        console.error(BACK_RESPONSE.error);
+        return { error: BACK_RESPONSE.message };
+      } else {
+       
+        dispatch({ type: "addPackage", newPackage: BACK_RESPONSE.packageData });
+        return { success: "Successfully posted package." };
+      }
+    } catch (err) {
+      console.error(err);
+      return { error: `Error has occurred` };
+    }
+  };
 
   return (
     <PackageContext.Provider 
       value={{
         packages, 
-        fetchPackages        
+        fetchPackages,
+        addPackage      
       }}
     >
       { children }
