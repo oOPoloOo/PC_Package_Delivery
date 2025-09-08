@@ -30,4 +30,12 @@ export type PackageStatus =
 | "Created"  | "Sent"   | "Returned"  
 | "Accepted" | "Cancelled";
 
+export const PACKAGE_STATUSES: PackageStatus[] = [
+  "Created",
+  "Sent",
+  "Returned",
+  "Accepted",
+  "Cancelled"
+];
+
 export type ChildrenElementProp = { children: React.ReactElement };
