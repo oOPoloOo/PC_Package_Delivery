@@ -4,23 +4,11 @@ using System.ComponentModel.DataAnnotations;
 
 public class PackageEntity
 {      
-    public Guid Id { get; set; } = Guid.NewGuid();   
+    public Guid Id { get; set; } = Guid.NewGuid();  
 
-    // Sender info
-    [Required]
-    public string SenderName { get; set; } = string.Empty;
-    [Required]
-    public string SenderAddress { get; set; } = string.Empty;
-    [Required]
-    public string SenderPhone { get; set; } = string.Empty;
+    public PersonInfo Sender { get; private set; }
 
-    // Recipient info
-    [Required]
-    public string RecipientName { get; set; } = string.Empty;
-    [Required]
-    public string RecipientAddress { get; set; } = string.Empty;
-    [Required]
-    public string RecipientPhone { get; set; } = string.Empty;
+    public PersonInfo Recipient { get; private set; }   
 
     // Package info
     public string TrackingNumber { get; set; } = GenerateTrackingNumber();
@@ -30,7 +18,6 @@ public class PackageEntity
     public DateTimeOffset PackageCreatedAt { get; set; } = DateTimeOffset.UtcNow;
 
     // Functions
-
     private static string GenerateTrackingNumber()
     {
         return $"PKG-{Guid.NewGuid().ToString("N").Substring(0, 8).ToUpper()}";
