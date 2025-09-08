@@ -4,19 +4,31 @@ using System.ComponentModel.DataAnnotations;
 
 public class PackageEntity
 {      
-    public Guid Id { get; set; } = Guid.NewGuid();  
+    public Guid Id { get; set; }  
 
     public PersonInfo Sender { get; private set; }
 
     public PersonInfo Recipient { get; private set; }   
 
     // Package info
-    public string TrackingNumber { get; set; } = GenerateTrackingNumber();
+    public string TrackingNumber { get; set; }
 
-    public PackageStatus CurrentStatus { get; set; } = PackageStatus.Created;
+    public PackageStatus CurrentStatus { get; set; }
 
-    public DateTimeOffset PackageCreatedAt { get; set; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset PackageCreatedAt { get; set; }
 
+    public List<StatusChange> History { get; private set; } = new();
+
+    private PackageEntity() { /* For EF */ }
+
+    private PackageEntity(PersonInfo sender, PersonInfo recipient)
+    {
+        Sender = sender;
+        Recipient = recipient;
+        // initial history entry
+        History.Add(new StatusChange(CurrentStatus));
+    }    
+    
     // Functions
     private static string GenerateTrackingNumber()
     {
@@ -24,28 +36,16 @@ public class PackageEntity
     } 
 
     // Creating new package
-    public static PackageEntity CreateNewPackage(
-        string senderName, 
-        string senderAddress, 
-        string senderPhone,
-        string recipientName,
-        string recipientAddress,
-        string recipientPhone)
+    public static PackageEntity CreateNewPackage(PersonInfo sender, PersonInfo recipient)
     {
-        return new PackageEntity
-        { 
-            //Overriding Id and TrackingNumber... to be sure
-            Id = Guid.NewGuid(),
-            TrackingNumber = GenerateTrackingNumber(),
-            SenderName = senderName,
-            SenderAddress = senderAddress,
-            SenderPhone = senderPhone,
-            RecipientName = recipientName,
-            RecipientAddress = recipientAddress,
-            RecipientPhone = recipientPhone,
-            CurrentStatus = PackageStatus.Created,
-            PackageCreatedAt = DateTimeOffset.UtcNow
-        };
+        var pkg = new PackageEntity(sender, recipient);
+
+        pkg.Id = Guid.NewGuid();
+        pkg.TrackingNumber = GenerateTrackingNumber();
+        pkg.CurrentStatus = PackageStatus.Created;
+        pkg.PackageCreatedAt = DateTimeOffset.UtcNow;
+        
+        return pkg;
     }
 
     public (bool Ok, string? Error) TryChangeStatus(PackageStatus newStatus)
@@ -57,7 +57,8 @@ public class PackageEntity
         return (false, $"Cannot change status from '{CurrentStatus}' to '{newStatus}'.");
 
         CurrentStatus = newStatus;
-        // TODO: Implement saving to db
+        // Save new status to db
+        History.Add(new StatusChange(newStatus));
         return (true, null);
     }
 }
