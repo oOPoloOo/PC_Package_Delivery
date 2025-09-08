@@ -15,12 +15,6 @@ public class PackagesController : ControllerBase
     // Dependency Injection
     public PackagesController(AppDbContext db) => _db = db;
 
-    // private readonly AppDbContext _dbContext;    
-    // public PackagesController(AppDbContext dbContext)
-    // {
-    //     _dbContext = dbContext;
-    // }
-
     // POST api/packages
     [HttpPost]
     public async Task<ActionResult<PackageSummaryDto>> 
