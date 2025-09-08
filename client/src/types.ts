@@ -18,7 +18,7 @@ export type CreatePackageRequest = {
 
 export type PackageContextType = {
    packages: Package[]; 
-   fetchPackages?: () => void; 
+   fetchPackages?: (filters?: { tracking?: string; status?: PackageStatus }) => void; 
    addPackage: (newPackage: CreatePackageRequest) => Promise<{ error: string } | { success: string }>;
 };
 
