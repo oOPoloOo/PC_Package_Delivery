@@ -40,13 +40,13 @@ export const PACKAGE_STATUSES: PackageStatus[] = [
   "Cancelled"
 ];
 
+export type BackAddPackageResponse =
+  | { error: string; message: string }
+  | { packageData: Package; acknowledged: boolean };
+
 export type ChangeStatusRequest = {
   NewStatus: PackageStatus;
 };
-
-export type ChangeStatusResponse =
-  | { error: string; message: string }
-  | PackageDetail;
 
 export type PackageDetail = {
   id: string;
@@ -68,5 +68,9 @@ export type StatusChange = {
   status: PackageStatus;
   changedAt: string;
 };
+
+export type BackChangeStatusResponse =
+  | { error: string; message: string }
+  | PackageDetail;
 
 export type ChildrenElementProp = { children: React.ReactElement };
