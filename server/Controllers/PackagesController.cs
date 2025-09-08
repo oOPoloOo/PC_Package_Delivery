@@ -116,8 +116,17 @@ public class PackagesController : ControllerBase
 
         // Trying change status 
         var result = pkg.TryChangeStatus(req.NewStatus);
+
         if (!result.Ok) 
             return BadRequest(new { message = result.Error });
+        
+        // EF Core requires both steps to properly track the new StatusChange:
+        // 1. Add to DbSet so it will be inserted into the database (_db.StatusChanges.Add).
+        // 2. Add to the navigation property (pkg.History.Add) so EF knows the relationship 
+        //    and keeps the in-memory object graph consistent.
+        var newHistory = new StatusChange(req.NewStatus, pkg.Id); 
+        _db.StatusChanges.Add(newHistory);                        
+        pkg.History.Add(newHistory);    
 
         // Save changes to db
         await _db.SaveChangesAsync();

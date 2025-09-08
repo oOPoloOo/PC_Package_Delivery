@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
-import type { Package } from "../../../types";
+import type { Package, PackageContextType, PackageStatus } from "../../../types";
 import {
   Package as PackageIcon,
   Send,
@@ -8,6 +8,7 @@ import {
   RotateCcw,
   XCircle,
 } from "lucide-react";
+import PackageContext from "../../../contexts/PackageContext";
 
 type Props = {
   data: Package;
@@ -109,15 +110,30 @@ const DropdownItem = styled.div`
 `;
 
 const PackageCard = ({ data }: Props) => {
+  
+  const { changeStatus } = useContext(PackageContext) as PackageContextType;
   const [currentStatus, setCurrentStatus] = useState(data.currentStatus);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-
+  const [dropdownOpen, setDropdownOpen] = useState(false); 
   const nextStatuses = allowedTransitions[currentStatus];
 
-  const handleStatusChange = (status: string) => {
+  const handleStatusChange = async (status: string) => {
     setCurrentStatus(status);
     setDropdownOpen(false);
-    // TODO: Call API to update status in backend
+    
+    try {
+      const result = await changeStatus(data.id, status as PackageStatus);
+
+      if ("error" in result)
+      {
+        console.error("Failed to update status:", result.error);
+        setCurrentStatus(data.currentStatus);
+      } else {
+        console.log("Status updated successfully");
+      }
+    } catch (err) {
+      console.error("Unexpected error updating status", err);
+      setCurrentStatus(data.currentStatus); 
+    }  
   };
 
   // Format createdAt

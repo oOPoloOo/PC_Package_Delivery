@@ -26,7 +26,7 @@ public class PackageEntity
         Sender = sender;
         Recipient = recipient;
         // initial history entry
-        History.Add(new StatusChange(CurrentStatus));
+        History.Add(new StatusChange(CurrentStatus,Id));
     }    
     
     // Functions
@@ -48,17 +48,19 @@ public class PackageEntity
         return pkg;
     }
 
-    public (bool Ok, string? Error) TryChangeStatus(PackageStatus newStatus)
+    public (bool Ok, string? Error, StatusChange? NewHistory) TryChangeStatus(PackageStatus newStatus)
     {
         if (newStatus == CurrentStatus)
-        return (false, $"Package is already this status '{CurrentStatus}'.");
+        return (false, $"Package is already this status '{CurrentStatus}'.", null);
 
         if (!StatusRules.AllowedTransitions.TryGetValue(CurrentStatus, out var allowed) || !allowed.Contains(newStatus))
-        return (false, $"Cannot change status from '{CurrentStatus}' to '{newStatus}'.");
+        return (false, $"Cannot change status from '{CurrentStatus}' to '{newStatus}'.", null);
 
-        CurrentStatus = newStatus;
-        // Save new status to db
-        History.Add(new StatusChange(newStatus));
-        return (true, null);
+        CurrentStatus = newStatus;              
+        
+        // Retuning StatusChange, to not modify db here
+        // Helps with EF tracking
+        var newHistory = new StatusChange(newStatus, Id);
+        return (true, null, newHistory);
     }
 }
