@@ -7,6 +7,7 @@ import {
   CheckCircle2,
   RotateCcw,
   XCircle,
+  Menu,
 } from "lucide-react";
 import PackageContext from "../../../contexts/PackageContext";
 
@@ -175,14 +176,14 @@ const PackageCard = ({ data }: Props) => {
   const nextStatuses = allowedTransitions[currentStatus];
 
   const handleStatusChange = async (status: string) => {
-    setCurrentStatus(status);
+    setCurrentStatus(status as PackageStatus);
 
     try {
       const result = await changeStatus(data.id, status as PackageStatus);
 
       if ("error" in result) {
         console.error("Failed to update status:", result.error);
-        setCurrentStatus(data.currentStatus);
+        setCurrentStatus(data.currentStatus as PackageStatus);
       } else {
         console.log("Status updated successfully");
       }
@@ -232,16 +233,20 @@ const PackageCard = ({ data }: Props) => {
       <StyledTitle>Created:</StyledTitle>
       <StyledText>{createdAt}</StyledText>
 
-      {nextStatuses.length > 0 && (
-        <IconColumn>
-          {nextStatuses.map((status) => (
-            <IconButton key={status} onClick={() => handleStatusChange(status)}>
-              {statusIcons[status]}
-              <Tooltip>{`Change to ${status}`}</Tooltip>
-            </IconButton>
-          ))}
-        </IconColumn>
-      )}
+      <IconColumn>
+        {/* <IconButton onClick={() => navigate('/packageDetails')}> */}
+        <IconButton>
+          <Menu />
+          <Tooltip>To Package Details</Tooltip>
+        </IconButton>
+      
+        {nextStatuses.map((status) => (
+          <IconButton key={status} onClick={() => handleStatusChange(status)}>
+            {statusIcons[status]}
+            <Tooltip>{`Change to ${status}`}</Tooltip>
+          </IconButton>
+        ))}        
+      </IconColumn>      
     </StyledCard>
   );
 };
