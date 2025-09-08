@@ -50,8 +50,8 @@ const StyledCard = styled.div`
 
 const StyledTitle = styled.h3`
   color: #dcccfe;
-  font-size: 18px;
-  margin-bottom: 4px;
+  font-size: 20px;
+  margin: 10px 0 2px 0;  
 `;
 
 const StyledTitleTop = styled(StyledTitle)`
@@ -60,71 +60,127 @@ const StyledTitleTop = styled(StyledTitle)`
 
 const StyledText = styled.p`
   color: #dcccfe;
-  line-height: 1.4;
-  margin-top: 2px;
+  font-size: 18px;
+  line-height: 1.5;
+  margin: 2px 0 8px 0;  
 `;
 
 const StatusRow = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  font-weight: 500;
-  margin-top: 8px;
+  font-weight: 600;
+  font-size: 17px;
+  margin: 2px 0 8px 0;  
 `;
 
-const DropdownContainer = styled.div`
-  position: absolute;
-  top: 12px;
-  right: 12px;
+const IconColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: absolute;  
+  bottom: 18px;
+  right: 22px;
 `;
 
-const DropdownButton = styled.button`
-  background: #2c2f38;
-  color: #dcccfe;
-  border: none;
-  border-radius: 6px;
-  padding: 4px 8px;
+const IconButton = styled.div`
+  position: relative;
   cursor: pointer;
-`;
-
-const DropdownList = styled.div`
-  position: absolute;
-  top: 36px;
-  right: 0;
-  background: #2c2f38;
+  color: #dcccfe;
+  padding: 4px;
   border-radius: 6px;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.3);
-  overflow: hidden;
-  z-index: 100;
-`;
-
-const DropdownItem = styled.div`
-  padding: 6px 12px;
   display: flex;
   align-items: center;
-  gap: 6px;
-  cursor: pointer;
+  justify-content: center;
+  font-size: 22px; 
+
   &:hover {
     background: #3a3f4b;
+  }
+
+  &:hover span {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  svg {
+    width: 2em;
+    height: 2em;
+  }
+`;
+
+const Tooltip = styled.span`
+  visibility: hidden;
+  opacity: 0;
+  width: max-content;
+  background-color: #2c2f38;
+  color: #dcccfe;
+  text-align: center;
+  border-radius: 4px;
+  padding: 4px 8px;
+  position: absolute;
+  right: 110%; 
+  top: 50%;
+  transform: translateY(-50%);
+  transition: opacity 0.2s;
+  white-space: nowrap;
+  font-size: 12px;
+  z-index: 10;
+`;
+
+const TruncatedTextWrapper = styled.div`
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+`;
+
+const TruncatedText = styled.p`
+  color: #dcccfe;
+  font-size: 18px;
+  line-height: 1.5;
+  margin: 2px 0 8px 0;  
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: default;
+`;
+
+const TextTooltip = styled.span`
+  visibility: hidden;
+  opacity: 0;
+  background-color: #2c2f38;
+  color: #dcccfe;
+  text-align: center;
+  border-radius: 6px;
+  padding: 6px 10px;   
+  position: absolute;
+  top: 125%; 
+  left: 50%;
+  transform: translateX(-50%);
+  transition: opacity 0.2s;
+  white-space: nowrap;
+  font-size: 16px;    
+  z-index: 10;
+
+  ${TruncatedTextWrapper}:hover & {
+    visibility: visible;
+    opacity: 1;
   }
 `;
 
 const PackageCard = ({ data }: Props) => {
-  
   const { changeStatus } = useContext(PackageContext) as PackageContextType;
   const [currentStatus, setCurrentStatus] = useState(data.currentStatus);
-  const [dropdownOpen, setDropdownOpen] = useState(false); 
   const nextStatuses = allowedTransitions[currentStatus];
 
   const handleStatusChange = async (status: string) => {
     setCurrentStatus(status);
-    setDropdownOpen(false);
-    
+
     try {
       const result = await changeStatus(data.id, status as PackageStatus);
 
-      if ("error" in result)
-      {
+      if ("error" in result) {
         console.error("Failed to update status:", result.error);
         setCurrentStatus(data.currentStatus);
       } else {
@@ -132,11 +188,10 @@ const PackageCard = ({ data }: Props) => {
       }
     } catch (err) {
       console.error("Unexpected error updating status", err);
-      setCurrentStatus(data.currentStatus); 
-    }  
+      setCurrentStatus(data.currentStatus);
+    }
   };
 
-  // Format createdAt
   const createdAt = new Date(data.packageCreatedAt).toLocaleString(undefined, {
     year: "numeric",
     month: "short",
@@ -147,43 +202,46 @@ const PackageCard = ({ data }: Props) => {
 
   return (
     <StyledCard>
-      {nextStatuses.length > 0 && (
-        <DropdownContainer>
-          <DropdownButton onClick={() => setDropdownOpen((prev) => !prev)}>
-            Change Status
-          </DropdownButton>
-          {dropdownOpen && (
-            <DropdownList>
-              {nextStatuses.map((status) => (
-                <DropdownItem key={status} onClick={() => handleStatusChange(status)}>
-                  {statusIcons[status]}
-                  <span>{status}</span>
-                </DropdownItem>
-              ))}
-            </DropdownList>
-          )}
-        </DropdownContainer>
-      )}
 
       <StyledTitleTop>From:</StyledTitleTop>
-      <StyledText>{data.senderName}</StyledText>
-
+      <TruncatedTextWrapper>
+      <TruncatedText>{data.senderName}</TruncatedText>
+      <TextTooltip>{data.senderName}</TextTooltip>
+      </TruncatedTextWrapper>
+      
       <StyledTitle>To:</StyledTitle>
-      <StyledText>{data.recipientName}</StyledText>
+      <TruncatedTextWrapper>
+        <TruncatedText>{data.recipientName}</TruncatedText>
+        <TextTooltip>{data.recipientName}</TextTooltip>
+      </TruncatedTextWrapper>
 
-      <StyledTitle>Tracking:</StyledTitle>
+      <StyledTitle>Tracking ID:</StyledTitle>
       <StyledText>{data.trackingNumber}</StyledText>
 
-      <StyledTitle>Status:</StyledTitle>
+      <StyledTitle>Package Status:</StyledTitle>
       <StatusRow>
         {statusIcons[currentStatus]}
-        <span style={{ color: statusColors[currentStatus]?.text || "#dcccfe" }}>
+        <span style={{ 
+          color: statusColors[currentStatus]?.text || "#dcccfe", 
+          fontSize: "18px"   
+        }}>
           {currentStatus}
         </span>
       </StatusRow>
 
       <StyledTitle>Created:</StyledTitle>
       <StyledText>{createdAt}</StyledText>
+
+      {nextStatuses.length > 0 && (
+        <IconColumn>
+          {nextStatuses.map((status) => (
+            <IconButton key={status} onClick={() => handleStatusChange(status)}>
+              {statusIcons[status]}
+              <Tooltip>{`Change to ${status}`}</Tooltip>
+            </IconButton>
+          ))}
+        </IconColumn>
+      )}
     </StyledCard>
   );
 };
