@@ -4,19 +4,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PackageDelivery.Data;
 using PackageDelivery.DTOs;
+using PackageDelivery.DTOs.Requests;
 using PackageDelivery.Models;
 
 [ApiController]
 [Route("api/[controller]")] // Based on name - PackagesController -> api/packages
 public class PackagesController : ControllerBase
 {
-    private readonly AppDbContext _dbContext;
-
+    private readonly AppDbContext _db;
     // Dependency Injection
-    public PackagesController(AppDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
+    public PackagesController(AppDbContext db) => _db = db;
 
     // POST api/packages
     [HttpPost]
@@ -28,24 +25,31 @@ public class PackagesController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var newPackage = PackageEntity.CreateNewPackage(
-            request.SenderName,
-            request.SenderAddress,
-            request.SenderPhone,
-            request.RecipientName,
+        var sender = new PersonInfo
+        (
+            request.SenderName, 
+            request.SenderAddress, 
+            request.SenderPhone
+        );
+
+        var recipient = new PersonInfo
+        (
+            request.RecipientName,  
             request.RecipientAddress,
             request.RecipientPhone
-        );    
+        );
 
-        _dbContext.Packages.Add(newPackage);
-        await _dbContext.SaveChangesAsync();
+        var newPackage = PackageEntity.CreateNewPackage(sender, recipient);    
+
+        _db.Packages.Add(newPackage);
+        await _db.SaveChangesAsync();
 
        var dto = PackageSummaryDto.FromEntity(newPackage);
 
        return CreatedAtAction(
-            nameof(GetPackageById), // Name of the action
-            new { id = newPackage.Id }, // Route values
-            dto // Response body
+            nameof(GetPackageById), 
+            new { id = newPackage.Id }, 
+            dto 
         );
     }
 
@@ -55,9 +59,8 @@ public class PackagesController : ControllerBase
         [FromQuery] string? tracking,
         [FromQuery] PackageStatus? status
     )
-    {
-        
-        var query = _dbContext.Packages.AsNoTracking();
+    {        
+        var query = _db.Packages.AsNoTracking();
 
         // Filter by tracking number, sender name, or recipient name
         if(!string.IsNullOrWhiteSpace(tracking))
@@ -65,8 +68,8 @@ public class PackagesController : ControllerBase
             var normalized = tracking.Trim().ToLower();
             query = query.Where(p =>
                 p.TrackingNumber.ToLower().Contains(normalized) ||
-                p.SenderName.ToLower().Contains(normalized) ||
-                p.RecipientName.ToLower().Contains(normalized));
+                p.Sender.Name.ToLower().Contains(normalized) ||
+                p.Recipient.Name.ToLower().Contains(normalized));
         }
 
         if(status.HasValue)
@@ -89,9 +92,47 @@ public class PackagesController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<PackageSummaryDto>> GetPackageById(Guid id)
     {
-        var package = await _dbContext.Packages.FindAsync(id);
+        
+        var package = await _db.Packages.FindAsync(id);
         if (package == null) return NotFound();
-
+        // TODO: add detailed DTO
         return Ok(PackageSummaryDto.FromEntity(package));
     }
+
+    // POST api/packages/{id}/status
+    [HttpPost("{id}/status")]
+    public async Task<ActionResult<PackageDetailDto>> ChangeStatus(
+        Guid id, 
+        [FromBody] ChangeStatusRequest req
+    )
+    {
+        // Loading package including history
+        var pkg = await _db.Packages
+            .Include(p => p.History)
+            .FirstOrDefaultAsync(p => p.Id == id);
+
+        if (pkg == null) 
+            return NotFound(new { message = "Package not found" });
+
+        // Trying change status 
+        var result = pkg.TryChangeStatus(req.NewStatus);
+
+        if (!result.Ok) 
+            return BadRequest(new { message = result.Error });
+        
+        // EF Core requires both steps to properly track the new StatusChange:
+        // 1. Add to DbSet so it will be inserted into the database (_db.StatusChanges.Add).
+        // 2. Add to the navigation property (pkg.History.Add) so EF knows the relationship 
+        //    and keeps the in-memory object graph consistent.
+        var newHistory = new StatusChange(req.NewStatus, pkg.Id); 
+        _db.StatusChanges.Add(newHistory);                        
+        pkg.History.Add(newHistory);    
+
+        // Save changes to db
+        await _db.SaveChangesAsync();
+
+        // Map to DTO
+        return Ok(PackageDetailDto.FromEntity(pkg));
+    }
+
 }

@@ -20,11 +20,13 @@ export type PackageContextType = {
    packages: Package[]; 
    fetchPackages?: (filters?: { tracking?: string; status?: PackageStatus }) => void; 
    addPackage: (newPackage: CreatePackageRequest) => Promise<{ error: string } | { success: string }>;
+   changeStatus: (id: string, newStatus: PackageStatus) => Promise<{ error: string } | { success: string }>;
 };
 
 export type PackageContextReducerActions = 
 { type: 'setPackage', data: Package[] } |
-{ type: 'addPackage', newPackage: Package };
+{ type: 'addPackage', newPackage: Package } |
+{ type: "updatePackageStatus"; id: string; newStatus: PackageStatus };
 
 export type PackageStatus =
 | "Created"  | "Sent"   | "Returned"  
@@ -37,5 +39,38 @@ export const PACKAGE_STATUSES: PackageStatus[] = [
   "Accepted",
   "Cancelled"
 ];
+
+export type BackAddPackageResponse =
+  | { error: string; message: string }
+  | { packageData: Package; acknowledged: boolean };
+
+export type ChangeStatusRequest = {
+  NewStatus: PackageStatus;
+};
+
+export type PackageDetail = {
+  id: string;
+  trackingNumber: string;
+  sender: PersonInfo;
+  recipient: PersonInfo;
+  currentStatus: PackageStatus;
+  packageCreatedAt: string;
+  history: StatusChange[];
+};
+
+export type PersonInfo = {
+  name: string;
+  address: string;
+  phone: string;
+};
+
+export type StatusChange = {
+  status: PackageStatus;
+  changedAt: string;
+};
+
+export type BackChangeStatusResponse =
+  | { error: string; message: string }
+  | PackageDetail;
 
 export type ChildrenElementProp = { children: React.ReactElement };

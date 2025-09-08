@@ -23,8 +23,8 @@ public class PackageSummaryDto
         return new PackageSummaryDto
         {
             id = entity.Id,
-            senderName = entity.SenderName,
-            recipientName = entity.RecipientName,
+            senderName = entity.Sender.Name,
+            recipientName = entity.Recipient.Name,
             trackingNumber = entity.TrackingNumber,
             currentStatus = entity.CurrentStatus,
             packageCreatedAt = entity.PackageCreatedAt
