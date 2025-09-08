@@ -38,4 +38,33 @@ export const PACKAGE_STATUSES: PackageStatus[] = [
   "Cancelled"
 ];
 
+export type ChangeStatusRequest = {
+  NewStatus: PackageStatus;
+};
+
+export type ChangeStatusResponse =
+  | { error: string; message: string }
+  | PackageDetail;
+
+export type PackageDetail = {
+  id: string;
+  trackingNumber: string;
+  sender: PersonInfo;
+  recipient: PersonInfo;
+  currentStatus: PackageStatus;
+  packageCreatedAt: string;
+  history: StatusChange[];
+};
+
+export type PersonInfo = {
+  name: string;
+  address: string;
+  phone: string;
+};
+
+export type StatusChange = {
+  status: PackageStatus;
+  changedAt: string;
+};
+
 export type ChildrenElementProp = { children: React.ReactElement };
