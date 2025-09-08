@@ -90,13 +90,12 @@ public class PackagesController : ControllerBase
 
     // GET api/packages/{id}
     [HttpGet("{id}")]
-    public async Task<ActionResult<PackageSummaryDto>> GetPackageById(Guid id)
+    public async Task<ActionResult<PackageDetailDto>> GetPackageById(Guid id)
     {
         
         var package = await _db.Packages.FindAsync(id);
         if (package == null) return NotFound();
-        // TODO: add detailed DTO
-        return Ok(PackageSummaryDto.FromEntity(package));
+        return Ok(PackageDetailDto.FromEntity(package));
     }
 
     // POST api/packages/{id}/status
