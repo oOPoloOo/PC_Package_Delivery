@@ -58,13 +58,7 @@ const PackageProvider = ({ children }: ChildrenElementProp) => {
     fetchPackages();
   }, []);
 
-//   type BackAddPackageResponse =
-// | { error: Error; message: string }
-// | {
-//     packageData: Package; acknowledged: boolean;  
-//   };
-
-   const addPackage = async (
+  const addPackage = async (
     newPackage: CreatePackageRequest
   ): Promise<{ error: string } | { success: string; }> => {
 
