@@ -1,5 +1,5 @@
 import { createContext, useEffect, useReducer } from "react";
-import type { PackageContextType, Package, PackageContextReducerActions, ChildrenElementProp  } from "../types";
+import type { PackageContextType, Package, PackageContextReducerActions, ChildrenElementProp, PackageStatus  } from "../types";
 
 const reducer = (state: Package[], action: PackageContextReducerActions) => {
   switch(action.type){
@@ -16,13 +16,24 @@ const PackageProvider = ({ children }: ChildrenElementProp) => {
 
    const [packages, dispatch] = useReducer(reducer, []);
 
-   const fetchPackages = async () => {
+   const fetchPackages = async (filters?: { tracking?: string; status?: PackageStatus }) => {
     try {
-      const res = await fetch(`http://localhost:5131/api/packages`);
+
+      let query = "";
+      if(filters)
+      {
+        const paramsURL = new URLSearchParams();
+         if (filters.tracking) paramsURL.append("tracking", filters.tracking);
+         if (filters.status) paramsURL.append("status", filters.status);
+         query = `?${paramsURL.toString()}`;
+      }
+
+      const res = await fetch(`http://localhost:5131/api/packages${query}`);
       const data: Package[] = await res.json();
       console.dir("PackageCONTEX fetchsetPackage ", data);
 
       dispatch({ type: 'setPackage', data });
+
     } catch (error) {
       console.error("Failed to fetch packages", error);
     }
