@@ -6,6 +6,7 @@ export type Package = {
   currentStatus: string,
   packageCreatedAt: string
 };
+
 export type CreatePackageRequest = {
   SenderName: string;
   SenderAddress: string;
@@ -14,15 +15,27 @@ export type CreatePackageRequest = {
   RecipientAddress: string;
   RecipientPhone: string;
 };
+
 export type PackageContextType = {
    packages: Package[]; 
-   fetchPackages?: () => void; 
+   fetchPackages?: (filters?: { tracking?: string; status?: PackageStatus }) => void; 
    addPackage: (newPackage: CreatePackageRequest) => Promise<{ error: string } | { success: string }>;
 };
-
 
 export type PackageContextReducerActions = 
 { type: 'setPackage', data: Package[] } |
 { type: 'addPackage', newPackage: Package };
+
+export type PackageStatus =
+| "Created"  | "Sent"   | "Returned"  
+| "Accepted" | "Cancelled";
+
+export const PACKAGE_STATUSES: PackageStatus[] = [
+  "Created",
+  "Sent",
+  "Returned",
+  "Accepted",
+  "Cancelled"
+];
 
 export type ChildrenElementProp = { children: React.ReactElement };
