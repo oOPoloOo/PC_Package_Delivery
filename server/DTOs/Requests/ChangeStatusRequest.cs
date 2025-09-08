@@ -1,0 +1,1 @@
+public record ChangeStatusRequest([Required] PackageStatus NewStatus);

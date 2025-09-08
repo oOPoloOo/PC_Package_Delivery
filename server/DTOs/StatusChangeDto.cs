@@ -1,0 +1,1 @@
+public record StatusChangeDto(PackageStatus Status, DateTimeOffset ChangedAt);
