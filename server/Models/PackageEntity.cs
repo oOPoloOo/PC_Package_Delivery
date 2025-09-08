@@ -60,4 +60,17 @@ public class PackageEntity
             PackageCreatedAt = DateTimeOffset.UtcNow
         };
     }
+
+    public (bool Ok, string? Error) TryChangeStatus(PackageStatus newStatus)
+    {
+        if (newStatus == CurrentStatus)
+        return (false, $"Package is already this status '{CurrentStatus}'.");
+
+        if (!StatusRules.AllowedTransitions.TryGetValue(CurrentStatus, out var allowed) || !allowed.Contains(newStatus))
+        return (false, $"Cannot change status from '{CurrentStatus}' to '{newStatus}'.");
+
+        CurrentStatus = newStatus;
+        // TODO: Implement saving to db
+        return (true, null);
+    }
 }
