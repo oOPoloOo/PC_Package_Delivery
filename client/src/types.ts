@@ -20,11 +20,13 @@ export type PackageContextType = {
    packages: Package[]; 
    fetchPackages?: (filters?: { tracking?: string; status?: PackageStatus }) => void; 
    addPackage: (newPackage: CreatePackageRequest) => Promise<{ error: string } | { success: string }>;
+   changeStatus: (id: string, newStatus: PackageStatus) => Promise<{ error: string } | { success: string }>;
 };
 
 export type PackageContextReducerActions = 
 { type: 'setPackage', data: Package[] } |
-{ type: 'addPackage', newPackage: Package };
+{ type: 'addPackage', newPackage: Package } |
+{ type: "updatePackageStatus"; id: string; newStatus: PackageStatus };
 
 export type PackageStatus =
 | "Created"  | "Sent"   | "Returned"  
