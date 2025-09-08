@@ -9,21 +9,31 @@ import type
   ChangeStatusRequest,    
   BackAddPackageResponse,
   BackChangeStatusResponse,
-  CreatePackageRequest
+  CreatePackageRequest,
+  BackGetPackageResponse,
+  PackageDetail
 } from "../types";
 
 const reducer = (state: Package[], action: PackageContextReducerActions) => {
   switch(action.type){
+
     case 'setPackage':
       return action.data;   
+
     case 'addPackage':
     return [...state, action.newPackage];
-     case "updatePackageStatus":
-      return state.map((pkg) =>
-        pkg.id === action.id
-          ? { ...pkg, currentStatus: action.newStatus }
-          : pkg
-      );    
+
+    case "updatePackageStatus":
+    return state.map((pkg) =>
+      pkg.id === action.id
+        ? { ...pkg, currentStatus: action.newStatus }
+        : pkg
+    );  
+    
+    case 'addPackageDetails':
+    return state.map(pkg =>
+      pkg.id === action.packageDetail.id ? { ...pkg, ...action.packageDetail } : pkg
+    );
   }
 }
 
@@ -118,13 +128,34 @@ const PackageProvider = ({ children }: ChildrenElementProp) => {
     }
   };
 
+  const fetchPackageById = async (id: string): Promise<BackGetPackageResponse> => {
+    try 
+    {
+      const res = await fetch(`/api/packages/${id}`);
+      if (!res.ok) {
+        const errorData = await res.json();
+        return { error: errorData?.message || 'Failed to fetch package' };
+      }
+
+      const packageData: PackageDetail = await res.json();
+
+      dispatch({ type: 'addPackageDetails', packageDetail: packageData });
+
+      return { packageData, acknowledged: true };
+    } catch (err) {
+      console.error(err);
+      return { error: 'An unexpected error occurred' };
+    }
+  };
+
   return (
     <PackageContext.Provider 
       value={{
         packages, 
         fetchPackages,
         addPackage,
-        changeStatus      
+        changeStatus,
+        fetchPackageById     
       }}
     >
       { children }
