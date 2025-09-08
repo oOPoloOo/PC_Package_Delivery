@@ -4,19 +4,19 @@ using System.ComponentModel.DataAnnotations;
 
 public class PackageEntity
 {      
-    public Guid Id { get; set; }  
+    public Guid Id { get; set; }  = default!;
 
-    public PersonInfo Sender { get; private set; }
+    public PersonInfo Sender { get; private set; } = default!;
 
-    public PersonInfo Recipient { get; private set; }   
+    public PersonInfo Recipient { get; private set; } = default!;
 
     // Package info
-    public string TrackingNumber { get; set; }
+    public string TrackingNumber { get; set; } = default!;
 
-    public PackageStatus CurrentStatus { get; set; }
+    public PackageStatus CurrentStatus { get; set; } 
 
     public DateTimeOffset PackageCreatedAt { get; set; }
-
+    
     public List<StatusChange> History { get; private set; } = new();
 
     private PackageEntity() { /* For EF */ }

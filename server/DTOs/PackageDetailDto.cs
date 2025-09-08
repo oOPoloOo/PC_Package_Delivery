@@ -1,3 +1,7 @@
+namespace PackageDelivery.DTOs;
+
+using PackageDelivery.Models;
+
 public record PackageDetailDto(
     Guid Id,
     string TrackingNumber,
@@ -7,7 +11,7 @@ public record PackageDetailDto(
     DateTimeOffset PackageCreatedAt,
     IReadOnlyList<StatusChangeDto> History)
 {
-    public static PackageDetailDto From(PackageEntity  p) => new(
+    public static PackageDetailDto FromEntity(PackageEntity  p) => new(
         p.Id,
         p.TrackingNumber,
         new PersonInfo(p.Sender.Name, p.Sender.Address, p.Sender.Phone),

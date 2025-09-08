@@ -1,4 +1,4 @@
-namespace PackageDelivery.DTOs;
+namespace PackageDelivery.DTOs.Requests;
 
 using System.ComponentModel.DataAnnotations;
 
