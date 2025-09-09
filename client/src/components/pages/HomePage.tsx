@@ -26,6 +26,56 @@ const StyledPostsContainer = styled.div`
   flex-wrap: wrap;
 `;
 
+const Hero = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-image: url('https://plus.unsplash.com/premium_photo-1661932036915-4fd90bec6e8a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fHNoaXBwaW5nfGVufDB8fDB8fHww');
+  color: white;
+  padding: 80px 20px;
+  text-align: center;
+
+  h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  p {
+    margin-bottom: 30px;
+    font-size: 1.2rem;
+  }
+`;
+
+const SearchContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  max-width: 600px;
+  width: 100%;
+
+  input {
+    flex: 1;
+    padding: 12px 15px;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+  }
+
+  button {
+    background-color: #e50914; // adjust to your brand color
+    color: white;
+    padding: 12px 20px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+`;
+
 const FilterBar = styled.div`
   display: flex;
   gap:12px;
@@ -58,38 +108,38 @@ const HomePage = () => {
   
   return (
     <Content>  
+         <Hero>
+        <h1>Hello, <span style={{ color: "#FFD700" }}>Customer</span></h1>
+        <p>Deliver everything, everywhere!</p>
+        <SearchContainer>
+          <input 
+            type="text" 
+            placeholder="Enter your tracking number"
+            value={tracking}
+            onChange={(e) => setTracking(e.target.value)}
+          />
 
-      <AddPackageButton
-        label="Add ME new PACKAGE!"
-        onClick={() => navigate('/addNewPackage')}
-      />
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value  as PackageStatus)}
+          >
+            <option value="">All statuses</option>
+            {
+              Object.values(PACKAGE_STATUSES).map((s) => (
+                <option key={s} value={s}>{s}</option> 
+              ))
+            }
+          </select>
 
-      <h1>Deliver everything, everywhere!</h1>
-      
-      <FilterBar>
+          <button onClick={applyFilters}>Search</button>
 
-        <input 
-          type="text" 
-          placeholder="Tracking number"
-          value={tracking}
-          onChange={(e) => setTracking(e.target.value)}
+        </SearchContainer>
+        <AddPackageButton
+          label="Add ME new PACKAGE!"
+          onClick={() => navigate('/addNewPackage')}
         />
-
-        <select
-          value={status}
-          onChange={(e) => setStatus(e.target.value  as PackageStatus)}
-        >
-          <option value="">All statuses</option>
-          {
-            Object.values(PACKAGE_STATUSES).map((s) => (
-              <option key={s} value={s}>{s}</option> 
-            ))
-          }
-        </select>
-
-        <button onClick={applyFilters}>Apply Filters</button>
-
-      </FilterBar>
+      </Hero>
+    
       <StyledPostsContainer>
         {packages.length ? (
           packages.map((item) => <Card key={item.id} data={item} />)
