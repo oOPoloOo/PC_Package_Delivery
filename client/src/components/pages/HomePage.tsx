@@ -65,6 +65,7 @@ const HomePage = () => {
       />
 
       <h1>Deliver everything, everywhere!</h1>
+      
       <FilterBar>
 
         <input 

@@ -1,10 +1,13 @@
 export type Package = {
-  id: string,
-  senderName: string,
-  recipientName: string,
-  trackingNumber: string,
-  currentStatus: string,
-  packageCreatedAt: string
+  id: string;
+  trackingNumber: string;
+  currentStatus: PackageStatus;
+  packageCreatedAt: string;
+  senderName?: string;
+  recipientName?: string;
+  sender?: PersonInfo;
+  recipient?: PersonInfo;
+  history?: StatusChange[];
 };
 
 export type CreatePackageRequest = {
@@ -20,13 +23,15 @@ export type PackageContextType = {
    packages: Package[]; 
    fetchPackages?: (filters?: { tracking?: string; status?: PackageStatus }) => void; 
    addPackage: (newPackage: CreatePackageRequest) => Promise<{ error: string } | { success: string }>;
-   changeStatus: (id: string, newStatus: PackageStatus) => Promise<{ error: string } | { success: string }>;
+   changeStatus: (id: string, newStatus: PackageStatus) => Promise<{ error: string } | { success: string }>;  
+   fetchPackageById: (id: Package["id"]) => Promise<Package>;
 };
 
 export type PackageContextReducerActions = 
 { type: 'setPackage', data: Package[] } |
 { type: 'addPackage', newPackage: Package } |
-{ type: "updatePackageStatus"; id: string; newStatus: PackageStatus };
+{ type: "updatePackageStatus"; id: string; newStatus: PackageStatus } |
+{ type: 'addPackageDetails'; packageDetail: Package };
 
 export type PackageStatus =
 | "Created"  | "Sent"   | "Returned"  
@@ -48,16 +53,6 @@ export type ChangeStatusRequest = {
   NewStatus: PackageStatus;
 };
 
-export type PackageDetail = {
-  id: string;
-  trackingNumber: string;
-  sender: PersonInfo;
-  recipient: PersonInfo;
-  currentStatus: PackageStatus;
-  packageCreatedAt: string;
-  history: StatusChange[];
-};
-
 export type PersonInfo = {
   name: string;
   address: string;
@@ -71,6 +66,10 @@ export type StatusChange = {
 
 export type BackChangeStatusResponse =
   | { error: string; message: string }
-  | PackageDetail;
+  | Package;
+
+export type BackGetPackageResponse =
+| { error: string; message?: string }  
+| { packageData: Package; acknowledged: boolean }; 
 
 export type ChildrenElementProp = { children: React.ReactElement };

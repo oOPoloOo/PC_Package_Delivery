@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Link } from 'react-router';
+import { useNavigate } from 'react-router';
 
 const HeaderS = styled.header`
     display: flex;
@@ -17,24 +17,17 @@ const HeaderS = styled.header`
         .left {
             display: flex;
             align-items: center;
-        }
-
-        a {
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-            text-decoration-color: var(--first-color);
+            cursor: pointer; 
         }
     }
 `;
 
 const Header = () => {
+    const navigate = useNavigate();
     return (
         <HeaderS>
-            <div className="left">
-                <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div className="left" onClick={() => navigate("/")} >
+              
                     <img
                         src="https://p7.hiclipart.com/preview/992/183/666/van-car-truck-computer-icons-delivery-pizza.jpg"
                         alt="Home"
@@ -47,11 +40,11 @@ const Header = () => {
                             fontWeight: 'bold',
                             textTransform: 'uppercase',
                             letterSpacing: '1px',
+                            marginLeft: '12px',
                         }}
                     >
-                        PC DELIVERY
-                    </span>
-                </Link>
+                    PC DELIVERY
+                    </span>                
             </div>
         </HeaderS>
     );

@@ -18,16 +18,16 @@ const Main = styled.main`
 `;
 
 const MainOutlet = () => {
-    return ( 
-      <PageWrapper>
-            <Header />
-                <Main>
-                    <Outlet />
-                    <ToastContainer position="top-center" autoClose={1700} />
-                </Main>
-            <Footer />
-      </PageWrapper>
-    );
+  return ( 
+    <PageWrapper>
+      <Header />
+        <Main>
+          <Outlet />
+          <ToastContainer position="top-center" autoClose={1700} />
+        </Main>
+      <Footer />
+    </PageWrapper>
+  );
 }
  
 export default MainOutlet;

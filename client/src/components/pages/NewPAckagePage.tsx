@@ -4,7 +4,7 @@ import type { CreatePackageRequest, PackageContextType } from "../../types";
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 
-const NewPackagePage = () => {
+const NewPAckagePage = () => {
 
   const { addPackage } = useContext(PackageContext) as PackageContextType;
   const navigate = useNavigate();
@@ -31,9 +31,13 @@ const NewPackagePage = () => {
     const result = await addPackage(formData);
     if ("error" in result) {
       toast.error(result.error);
-    } else {
-       toast.success(result.success || 'Package added successfully.');
-      setTimeout(() => navigate('/'), 2500);
+    } else 
+    {
+      // Navigate immediately after toast closes
+      toast.success('Package added successfully.', {
+        autoClose: 1700,
+        onClose: () => navigate("/", { replace: true }),
+      });
     }
   };
 
@@ -119,4 +123,4 @@ const NewPackagePage = () => {
   );
 };
 
-export default NewPackagePage;
+export default NewPAckagePage;
