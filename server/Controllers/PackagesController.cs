@@ -91,9 +91,11 @@ public class PackagesController : ControllerBase
     // GET api/packages/{id}
     [HttpGet("{id}")]
     public async Task<ActionResult<PackageDetailDto>> GetPackageById(Guid id)
-    {
-        
-        var package = await _db.Packages.FindAsync(id);
+    {      
+        var package = await _db.Packages
+        .Include(p => p.History) //Include history in package results
+        .FirstOrDefaultAsync(p => p.Id == id);              
+
         if (package == null) return NotFound();
         return Ok(PackageDetailDto.FromEntity(package));
     }
