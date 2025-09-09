@@ -10,6 +10,7 @@ import {
   Menu,
 } from "lucide-react";
 import PackageContext from "../../../contexts/PackageContext";
+import { useNavigate } from "react-router";
 
 type Props = {
   data: Package;
@@ -174,6 +175,7 @@ const PackageCard = ({ data }: Props) => {
   const { changeStatus } = useContext(PackageContext) as PackageContextType;
   const [currentStatus, setCurrentStatus] = useState(data.currentStatus);
   const nextStatuses = allowedTransitions[currentStatus];
+  const navigate = useNavigate();
 
   const handleStatusChange = async (status: string) => {
     setCurrentStatus(status as PackageStatus);
@@ -234,18 +236,17 @@ const PackageCard = ({ data }: Props) => {
       <StyledText>{createdAt}</StyledText>
 
       <IconColumn>
-        {/* <IconButton onClick={() => navigate('/packageDetails')}> */}
-        <IconButton>
+        <IconButton onClick={() => navigate(`details/${data.id}`)}>      
           <Menu />
-          <Tooltip>To Package Details</Tooltip>
-        </IconButton>
+        <Tooltip>To Package Details</Tooltip>
+      </IconButton>
       
-        {nextStatuses.map((status) => (
-          <IconButton key={status} onClick={() => handleStatusChange(status)}>
-            {statusIcons[status]}
-            <Tooltip>{`Change to ${status}`}</Tooltip>
-          </IconButton>
-        ))}        
+      {nextStatuses.map((status) => (
+        <IconButton key={status} onClick={() => handleStatusChange(status)}>
+          {statusIcons[status]}
+          <Tooltip>{`Change to ${status}`}</Tooltip>
+        </IconButton>
+      ))}        
       </IconColumn>      
     </StyledCard>
   );
