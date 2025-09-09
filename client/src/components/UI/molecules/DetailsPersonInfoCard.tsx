@@ -13,6 +13,7 @@ const StyledCard = styled.div`
   border-radius: 8px;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
   width: 350px;
+  height: 400px; 
 `;
 
 const StyledTitle = styled.h3`
@@ -29,7 +30,7 @@ const SectionTitle = styled.h4`
   color: #dcccfe;
   font-size: 18px;
   font-weight: 600;
-  margin-bottom: 4px;
+  margin-bottom: 25px;
 `;
 
 const StyledText = styled.p`
@@ -41,7 +42,7 @@ const StyledText = styled.p`
 const DetailsPersonInfoCard = ({ sender, recipient }: Props) => {
   return (
     <StyledCard>
-      <StyledTitle>History</StyledTitle>
+      <StyledTitle>Contact Info</StyledTitle>
 
       <Section>
         <SectionTitle>Sender</SectionTitle>

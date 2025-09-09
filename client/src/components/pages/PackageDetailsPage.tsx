@@ -13,6 +13,12 @@ const PageContainer = styled.div`
   gap: 20px;
   padding: 20px;
   flex-wrap: wrap;
+
+  justify-content: center;    
+  align-items: flex-start;
+
+  min-height: 65vh;
+  align-items: center; 
 `;
 
 const PackageDetailsPage = () => {
