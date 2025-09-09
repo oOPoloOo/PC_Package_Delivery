@@ -14,6 +14,7 @@ const StyledCard = styled.div`
   border-radius: 8px;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
   width: 350px;
+  height: 400px; 
 `;
 
 const StyledTitle = styled.h3`
