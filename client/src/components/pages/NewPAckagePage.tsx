@@ -4,7 +4,7 @@ import type { CreatePackageRequest, PackageContextType } from "../../types";
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 
-const NewPackagePage = () => {
+const NewPAckagePage = () => {
 
   const { addPackage } = useContext(PackageContext) as PackageContextType;
   const navigate = useNavigate();
@@ -119,4 +119,4 @@ const NewPackagePage = () => {
   );
 };
 
-export default NewPackagePage;
+export default NewPAckagePage;
