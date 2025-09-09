@@ -35,9 +35,7 @@ const PackageDetailsPage = () => {
   return (
     <PageContainer>
       <DetailsInfoCard
-        currentStatus={pkg.currentStatus}
-        trackingNumber={pkg.trackingNumber}
-        packageCreatedAt={pkg.packageCreatedAt}
+      data={pkg}
       />
       {pkg.sender && pkg.recipient && (
         <DetailsPersonInfoCard
