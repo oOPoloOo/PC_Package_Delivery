@@ -65,7 +65,7 @@ const SearchContainer = styled.div`
   }
 
   button {
-    background-color: #e50914; // adjust to your brand color
+    background-color: #e50914; 
     color: white;
     padding: 12px 20px;
     border-radius: 6px;
@@ -74,20 +74,6 @@ const SearchContainer = styled.div`
     font-size: 1rem;
     font-weight: bold;
   }
-`;
-
-const FilterBar = styled.div`
-  display: flex;
-  gap:12px;
-  margin: 15px 0;
-
-  input, select, button 
-  {
-    padding: 8px;
-    border-radius: 6px;
-    border: none;
-    outline: none;
-  }  
 `;
 
 const HomePage = () => {
